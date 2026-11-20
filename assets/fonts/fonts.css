@@ -1,0 +1,43 @@
+/* Local copies of the type families supplied by the Stitch reference. */
+@font-face {
+  font-family: 'Radio Canada Big';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(radio-canada-big-1.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Radio Canada Big';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(radio-canada-big-2.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Radio Canada Big';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(radio-canada-big-3.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Red Hat Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(red-hat-display-4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Red Hat Display';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(red-hat-display-5.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spline Sans Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(spline-sans-mono-6.ttf) format('truetype');
+}
