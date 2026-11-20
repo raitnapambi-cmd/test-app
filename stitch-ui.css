@@ -18,6 +18,19 @@ body.stitch-app{--blue:#0755c9;--navy:#0e4488;--yellow:#ffd24d;--ink:#16233c;--m
 .stitch-app .retail-scanner-line{background:#e53935;box-shadow:none;left:6%;right:6%}.stitch-app .retail-scanner-camera.found .retail-scanner-target{border-color:#07834c}.stitch-app .retail-scanner-camera.found .frame-corner{border-color:#07834c}
 .stitch-app .retail-scanner-line{animation:none}.stitch-app .scan-running .retail-scanner-line{animation:scannerSweep 2.2s ease-in-out infinite alternate}
 @keyframes scannerSweep{from{top:12%}to{top:88%}}
+.scan-feedback{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;width:max-content;max-width:94%;pointer-events:none}.scan-feedback[hidden]{display:none!important}
+.scan-feedback-content{display:flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid #ffffffaa;border-radius:12px;background:#07834cf5;color:white;box-shadow:0 4px 18px #071a2b55;font:700 14px/20px 'Radio Canada Big',sans-serif}
+.scan-confirmation-icon{width:32px;height:32px;flex:none;stroke-width:2.2}.scan-confirmation-icon path{stroke-dasharray:24;stroke-dashoffset:0}
+.scan-confirmed .scan-feedback-content{animation:scannerConfirmation 1s ease-out both}.scan-confirmed .scan-confirmation-icon{animation:scannerCheckPop .38s cubic-bezier(.2,.8,.2,1) both}.scan-confirmed .scan-confirmation-icon path{animation:scannerCheckDraw .25s .09s ease-out both}
+@keyframes scannerConfirmation{0%{opacity:0;transform:translateY(10px) scale(.84)}20%{opacity:1;transform:translateY(-2px) scale(1.04)}32%,78%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-6px) scale(.98)}}
+@keyframes scannerCheckPop{0%{transform:scale(.45)}65%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes scannerCheckDraw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
+.stitch-app .result-card.switching{animation:planogramCardSwap .64s cubic-bezier(.2,.8,.2,1) both}
+.stitch-app .result-card.switching .location-block{animation:planogramCodeSwap .6s cubic-bezier(.2,.8,.2,1) both}
+.stitch-app .result-card.switching .product{animation:planogramNameSwap .48s ease-out both}
+@keyframes planogramCardSwap{0%{opacity:.52;transform:translateY(14px) scale(.975);border-color:#0755c9;box-shadow:0 0 0 3px #0755c95c}42%{opacity:1;transform:translateY(-4px) scale(1.008);border-color:#0755c9;box-shadow:0 0 0 4px #0755c933,0 8px 22px #0755c91f}75%{border-color:#75a7eb}100%{opacity:1;transform:none;border-color:#e2e8f0;box-shadow:none}}
+@keyframes planogramCodeSwap{0%{opacity:.32;transform:translateY(11px) scale(.96)}50%{opacity:1;transform:translateY(-2px) scale(1.015)}100%{opacity:1;transform:none}}
+@keyframes planogramNameSwap{0%{opacity:.25;transform:translateY(6px)}100%{opacity:1;transform:none}}
 .scanner-idle-preview{display:none;aspect-ratio:3/2;background:#16233c;border-radius:10px;color:#e6edf7;place-content:center;justify-items:center;gap:12px;font-size:12px;text-align:center}.idle-barcode{width:96px;height:64px;color:#ffd24d}
 #scanView[hidden]+.scanner-idle-preview{display:grid}.scanner-status{font-size:12px;line-height:17px;color:#475569;overflow-wrap:anywhere}.scanner-status[hidden]{display:none!important}
 .stitch-app .retail-scan-power{width:auto;flex:0 0 auto;min-height:40px;border:1px solid transparent;border-radius:8px;background:#0e4488;color:#fff;padding:8px 12px;font:700 13px/18px 'Radio Canada Big',sans-serif}

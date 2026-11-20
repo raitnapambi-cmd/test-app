@@ -185,7 +185,7 @@ main{max-width:680px;padding:12px 12px 95px}.card{padding:12px;border-radius:12p
 .result.switching,.result.switching .location,.result.switching .product{animation:none}
 button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #b37600;outline-offset:3px}
 @media(max-width:340px){.position-strip{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:7px}.brand{font-size:14px}.map-head{flex-wrap:wrap}}
-</style><link rel="stylesheet" href="assets/fonts/fonts.css"><link rel="stylesheet" href="stitch-ui.css?v=hp-v3"><script src="rack-guidance.js"></script></head><body class="stitch-app">
+</style><link rel="stylesheet" href="assets/fonts/fonts.css"><link rel="stylesheet" href="stitch-ui.css?v=hp-v4"><script src="rack-guidance.js"></script></head><body class="stitch-app">
 <div id="launchSplash" aria-hidden="true"><div><strong>Planogram DS by raitttt</strong><span>Temukan barang, pastikan posisi rak.</span></div></div>
 <header class="app-header"><div class="topline"><div class="brand-lockup"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4m8 0h4v4M4 16v4h4m8 0h4v-4M7 9v6m3-7v8m4-8v8m3-7v6"/></svg><h1 class="brand">Planogram DS by raitttt</h1></div><a class="scanner-wa-support header-support" aria-label="Bantuan? @Raitttt" title="Bantuan? @Raitttt" href="https://wa.me/62816665264?text=Halo%20Raitttt%2C%20saya%20butuh%20bantuan%20setup%20atau%20pemasangan%20Planogram%20DS." target="_blank" rel="noopener noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 11H2v7h4v-7Zm16 0h2v7h-4v-7Zm0 7c0 3-4 4-8 4"/></svg><span class="header-support-label">Bantuan</span></a><button class="menu header-cloud" id="settingsBtn" type="button" aria-label="Kelola data planogram" title="Unduh atau perbarui data"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18H6a4 4 0 0 1-.7-7.94A6.6 6.6 0 0 1 18 8.5a4.8 4.8 0 0 1 1 9.5h-2M12 12v8m-3-3 3 3 3-3"/></svg><i class="cloud-status-dot" id="cloudStatusDot" aria-hidden="true"></i></button></div></header>
 
@@ -211,7 +211,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #b3
 <section class="page" id="homePage">
 <section id="retailScanner" class="card retail-scanner stitch-scanner" aria-label="Pemindai barcode">
   <div class="retail-scanner-head"><div class="scanner-title"><i class="scanner-live-dot" aria-hidden="true"></i><strong>Pemindai barcode</strong><small id="scanEngineText">Kamera belakang</small></div><span class="retail-scanner-badge" id="scanCameraBadge">Belum aktif</span></div>
-  <div id="scanView" class="retail-scanner-view" hidden><div class="retail-scanner-camera"><video id="scanVideo" autoplay muted playsinline></video><div class="retail-scanner-shade"><div class="retail-scanner-target"><i class="frame-corner tl"></i><i class="frame-corner tr"></i><i class="frame-corner bl"></i><i class="frame-corner br"></i><div class="retail-scanner-line"></div></div></div></div></div>
+  <div id="scanView" class="retail-scanner-view" hidden><div class="retail-scanner-camera"><video id="scanVideo" autoplay muted playsinline></video><div class="retail-scanner-shade"><div class="retail-scanner-target"><i class="frame-corner tl"></i><i class="frame-corner tr"></i><i class="frame-corner bl"></i><i class="frame-corner br"></i><div class="retail-scanner-line"></div></div></div><div id="scanFeedback" class="scan-feedback" role="status" aria-live="polite" aria-atomic="true" hidden><div class="scan-feedback-content"><svg class="scan-confirmation-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span>Item ditemukan</span></div></div></div></div>
   <div class="scanner-idle-preview"><svg class="idle-barcode" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4m8 0h4v4M4 16v4h4m8 0h4v-4M7 9v6m3-7v8m4-8v8m3-7v6"/></svg><span>Posisikan barcode di dalam kotak</span></div>
   <div id="scanStatus" class="scanner-status" role="status" aria-live="polite">Unduh data untuk mulai memindai barcode.</div>
   <div class="retail-scanner-controls" role="group" aria-label="Kontrol kamera"><button id="scanPowerBtn" type="button" class="retail-scan-power" aria-pressed="false">Aktifkan kamera</button><button id="scanTorchBtn" type="button" disabled>☀ Senter</button></div><div id="scanFoot" class="retail-scanner-foot"></div>
@@ -251,6 +251,8 @@ function lookupPlanogram(code){const key=String(code||'').trim();if(!key)return 
 function locationsFor(plu){return data.items.filter(it=>it.plu===plu)}
 function displayMatch(code,found){
   const item=data.items[found.index];if(!item)return;
+  const changedItem=current?.plu!==item.plu;
+  clearPlanogramTransition();
   // Product lookup stays independent from optional layout points.
   const seen=new Set(),locations=[];
   for(const loc of locationsFor(item.plu)){const key=String(loc.locationCode||'');if(seen.has(key))continue;seen.add(key);locations.push(loc)}
@@ -267,6 +269,7 @@ function displayMatch(code,found){
   }
   document.querySelectorAll('[data-location-index]').forEach(b=>b.onclick=()=>chooseLocation(locations[Number(b.dataset.locationIndex)]));
   chooseLocation(item);
+  if(changedItem)animatePlanogramChange();
 }
 
 // Optional geometry may be absent or corrupted in an old per-device correction.
@@ -326,10 +329,38 @@ function updateActiveResult(item){
   $('openRackBtn').setAttribute('aria-describedby','chosenGuidance');
 }
 
-// Presentation only: preserve decoder status updates but omit redundant success text.
+// Presentation-only motion; decoder, locking and scan scheduling stay untouched.
+let planogramMotionTimer=0,scannerFeedbackTimer=0;
+function clearPlanogramTransition(){
+  clearTimeout(planogramMotionTimer);
+  $('resultCard').classList.remove('switching');
+}
+function animatePlanogramChange(){
+  clearPlanogramTransition();
+  const card=$('resultCard');
+  void card.offsetWidth;
+  card.classList.add('switching');
+  planogramMotionTimer=setTimeout(()=>card.classList.remove('switching'),700);
+}
+function hideScannerConfirmation(){
+  clearTimeout(scannerFeedbackTimer);
+  document.querySelector('.retail-scanner-camera').classList.remove('scan-confirmed');
+  $('scanFeedback').hidden=true;
+}
+function showScannerConfirmation(){
+  hideScannerConfirmation();
+  const feedback=$('scanFeedback');
+  feedback.hidden=false;
+  void feedback.offsetWidth;
+  document.querySelector('.retail-scanner-camera').classList.add('scan-confirmed');
+  scannerFeedbackTimer=setTimeout(hideScannerConfirmation,1000);
+}
+// Keep the old redundant status line hidden, with short confirmation inside the preview.
 function syncScannerStatusVisibility(){
   const status=$('scanStatus');
-  status.hidden=/^item ditemukan[.!]?$/i.test(status.textContent.trim());
+  const success=/^item ditemukan[.!]?$/i.test(status.textContent.trim());
+  status.hidden=success;
+  if(success)showScannerConfirmation();else hideScannerConfirmation();
 }
 new MutationObserver(syncScannerStatusVisibility).observe($('scanStatus'),{childList:true,characterData:true,subtree:true});
 syncScannerStatusVisibility();
@@ -340,6 +371,7 @@ if(typeof ResizeObserver==='function')new ResizeObserver(syncHeaderHeight).obser
 window.addEventListener('resize',syncHeaderHeight);
 syncHeaderHeight();
 function renderWaitingState(message){
+  clearPlanogramTransition();hideScannerConfirmation();
   $('scanResult').className='result empty';
   $('scanResult').innerHTML=`<div class="empty-symbol"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4m8 0h4v4M4 16v4h4m8 0h4v-4M7 9v6m3-7v8m4-8v8m3-7v6"/></svg></div><div><h2>Menunggu Hasil Pindai</h2><p>${esc(message)}</p></div>`;
 }
